@@ -10,6 +10,8 @@ const gameConfig = {
   },
   parent: 'game',
   scene: [DemoScene],
+  antialias: false,
+  roundPixels: true,
 };
 
 const game = new Phaser.Game(gameConfig);
