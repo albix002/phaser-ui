@@ -1,4 +1,4 @@
-import UIElement from './UIelement';
+import UIElement from './UIelement.js';
 import Phaser from 'phaser';
 
 export default abstract class Layout extends UIElement {

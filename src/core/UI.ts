@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import UIElement from './UIelement';
+import UIElement from './UIelement.js';
 
 /**
  * Root container of the UI system.

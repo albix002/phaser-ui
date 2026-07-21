@@ -1,8 +1,8 @@
-import UIElement from '../core/UIelement';
+import UIElement from '../core/UIelement.js';
 import Phaser from 'phaser';
-import Panel from './panel';
-import Label from './label';
-import { ButtonStyle, ButtonVariant, ButtonVisualStyle, DefaultTheme } from '../themes/Theme';
+import Panel from './panel.js';
+import Label from './label.js';
+import { ButtonStyle, ButtonVariant, ButtonVisualStyle, DefaultTheme } from '../themes/Theme.js';
 
 export enum ButtonState {
   Normal,

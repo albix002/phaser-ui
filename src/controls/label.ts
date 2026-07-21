@@ -1,6 +1,6 @@
-import UIElement from '../core/UIelement';
+import UIElement from '../core/UIelement.js';
 import Phaser from 'phaser';
-import { DefaultTheme, LabelStyle } from '../themes/Theme';
+import { DefaultTheme, LabelStyle } from '../themes/Theme.js';
 
 export interface LabelOptions {
   x?: number;

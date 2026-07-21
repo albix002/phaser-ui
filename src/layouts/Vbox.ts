@@ -1,5 +1,5 @@
-import Layout from '../core/layout';
-import UIElement from '../core/UIelement';
+import Layout from '../core/layout.js';
+import UIElement from '../core/UIelement.js';
 
 export default class Vbox extends Layout {
   protected override _spacing = 15;

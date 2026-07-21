@@ -1,6 +1,6 @@
-import Layout from '../core/layout';
-import UIElement from '../core/UIelement';
-import { DefaultTheme, PanelStyle } from '../themes/Theme';
+import Layout from '../core/layout.js';
+import UIElement from '../core/UIelement.js';
+import { DefaultTheme, PanelStyle } from '../themes/Theme.js';
 import Phaser from 'phaser';
 
 export interface PanelOptions {
