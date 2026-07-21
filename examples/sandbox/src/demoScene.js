@@ -1,23 +1,62 @@
 import Phaser from 'phaser';
-import { Button, VBox, Panel, DefaultTheme } from '../node_modules/phaser-ui/dist/index.js';
+import { UI, Panel, VBox, Label, Button } from '../../../dist/index.js';
 
 export default class DemoScene extends Phaser.Scene {
   create() {
-    const purple = DefaultTheme.button.purple;
-    const button = new Button(this, {
-      text: 'Play',
-      variant: 'purple',
-      x: 100,
-      y: 100,
+    this.ui = new UI(this);
 
-      style: { ...purple, normal: { ...purple.normal, panel: { ...purple.normal.panel, background: 0xffffff } } },
+    //
+    // PANEL AUTO SIZE
+    //
+    const panel = new Panel(this, {
+      x: 50,
+      y: 50,
     });
 
-    button.validate();
+    panel.setLayout(new VBox(this));
+
+    const label = new Label(this, {
+      text: '0',
+    });
+
+    panel.addChild(label);
+
+    //
+    // BUTTON
+    //
+    const button = new Button(this, {
+      x: 50,
+      y: 200,
+      text: 'Increment',
+      variant: 'purple',
+    });
+
+    let value = 0;
 
     button.onClick(() => {
-      if (button.getText() === 'Play') button.setText('ciao');
-      else button.setText('Play');
+      label.setText('110');
+
+      this.ui?.validateLayout();
+
+      console.log(panel.width);
     });
+    //
+    // BUTTON AUTO SIZE TEST
+    //
+    const button2 = new Button(this, {
+      x: 50,
+      y: 300,
+      text: 'Play',
+      variant: 'purple',
+    });
+
+    button2.onClick(() => {
+      if (button2.getText() === 'Play') button2.setText('A much longer button text');
+      else button2.setText('Play');
+
+      console.log('button2:', button2.width, button2.height);
+    });
+
+    this.ui.add([panel, button, button2]);
   }
 }

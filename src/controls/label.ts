@@ -32,13 +32,15 @@ export default class Label extends UIElement {
   }
 
   protected override layout(): void {
-    this.setSize(this._textObject.width, this._textObject.height);
+    this.setMeasuredSize(this._textObject.width, this._textObject.height);
+    console.log('label', this.width, this.height, this.x, this.y);
   }
 
   public setText(text: string): this {
     if (this._textObject.text === text) return this;
     this._textObject.setText(text);
-    this.invalidate();
+
+    this.invalidateLayout();
     return this;
   }
 
@@ -55,10 +57,11 @@ export default class Label extends UIElement {
   }
 
   setStyle(label: LabelStyle) {
+    if (this._style === label) return;
     this._style = label;
     this._textObject.setColor(label.color);
     this._textObject.setFontSize(label.fontSize);
     this._textObject.setFontFamily(label.fontFamily);
-    this.invalidate();
+    this.invalidateLayout();
   }
 }

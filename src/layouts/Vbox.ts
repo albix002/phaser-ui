@@ -3,6 +3,7 @@ import UIElement from '../core/UIelement.js';
 
 export default class Vbox extends Layout {
   protected override _spacing = 15;
+  protected override _padding = 10;
 
   protected override layout(): void {
     let y = this._padding;
@@ -11,12 +12,11 @@ export default class Vbox extends Layout {
     for (const child of this.list) {
       if (!(child instanceof UIElement)) continue;
 
-      child.validate();
-
+      child.validateLayout();
       maxWidth = Math.max(maxWidth, child.width);
     }
 
-    const x = 0;
+    const centerX = this._padding + maxWidth / 2;
 
     for (const [index, child] of this.list.entries()) {
       if (!(child instanceof UIElement)) continue;
@@ -25,11 +25,11 @@ export default class Vbox extends Layout {
         y += this._spacing;
       }
 
-      y += child.height / 2;
+      const centerY = y + child.height / 2;
 
-      child.setPosition(x, y);
+      child.setPosition(centerX, centerY);
 
-      y += child.height / 2;
+      y += child.height;
     }
 
     this.setSize(maxWidth + this._padding * 2, y + this._padding);

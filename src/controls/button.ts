@@ -1,8 +1,8 @@
 import UIElement from '../core/UIelement.js';
 import Phaser from 'phaser';
-import Panel from './panel.js';
 import Label from './label.js';
 import { ButtonStyle, ButtonVariant, ButtonVisualStyle, DefaultTheme } from '../themes/Theme.js';
+import Shape from './shape.js';
 
 export enum ButtonState {
   Normal,
@@ -22,7 +22,7 @@ export interface ButtonOptions {
 
 export default class Button extends UIElement {
   private _buttonState: ButtonState = ButtonState.Normal;
-  private readonly _panel: Panel;
+  private readonly _background: Shape;
   private readonly _label: Label;
   private readonly _style: ButtonStyle;
   private _variant: ButtonVariant | 'red';
@@ -33,17 +33,15 @@ export default class Button extends UIElement {
 
   constructor(scene: Phaser.Scene, options: ButtonOptions) {
     super(scene, options.x ?? 0, options.y ?? 0);
-    this._panel = new Panel(scene, {
-      height: 0,
-      width: 0,
-    });
+    this._variant = options.variant ?? 'red';
+    this._style = options.style ?? DefaultTheme.button[this._variant];
+    this._background = new Shape(scene, this._style.normal.panel);
+
     this._label = new Label(scene, {
       text: options.text ?? '',
     });
-    this._variant = options.variant ?? 'red';
-    this._style = options.style ?? DefaultTheme.button[this._variant];
 
-    this.add([this._panel, this._label]);
+    this.add([this._background, this._label]);
 
     this.on('pointerdown', () => {
       if (!this.isEnabled()) return;
@@ -87,17 +85,20 @@ export default class Button extends UIElement {
   }
 
   protected override layout(): void {
-    this._label.validate();
+    this._label.validateLayout();
 
     const padding = this._style.padding * 2;
 
-    const width = this._widthExplicit == 0 ? this._label.width + padding : this._widthExplicit;
-    const height = this._heightExplicit == 0 ? this._label.height + padding : this._heightExplicit;
-    this._panel.setSize(width, height);
+    const width = this._widthExplicit || this._label.width + padding;
 
-    this._panel.validate();
+    const height = this._heightExplicit || this._label.height + padding;
 
-    this.setSize(width, height);
+    this._background.setMeasuredSize(width, height);
+    this._background.validateLayout();
+
+    this._label.setPosition(0, 0);
+
+    this.setMeasuredSize(width, height);
 
     this.updateHitArea();
   }
@@ -107,7 +108,7 @@ export default class Button extends UIElement {
     this._widthExplicit = 0;
     this._heightExplicit = 0;
     this._label.setText(text);
-    this.invalidate();
+    this.invalidateLayout();
 
     return this;
   }
@@ -118,13 +119,10 @@ export default class Button extends UIElement {
   }
   public setStyle(style: ButtonVisualStyle): void {
     this._label.setStyle(style.label);
-    this._panel.setStyle(style.panel);
-    this._label.validate();
-    this._panel.validate();
+    this._background.setStyle(style.panel);
 
-    this.invalidate();
+    this.invalidateLayout();
   }
-
   private changeState(state: ButtonState): void {
     if (this._buttonState === state) return;
     this._buttonState = state;
@@ -176,6 +174,6 @@ export default class Button extends UIElement {
     this._widthExplicit = config.w ?? this.width;
     this._heightExplicit = config.h ?? this.height;
 
-    this.invalidate();
+    this.invalidateLayout();
   }
 }

@@ -13,6 +13,7 @@ const gameConfig = {
   scene: [DemoScene],
   antialias: false,
   roundPixels: true,
+  backgroundColor: '#ffbaba',
 };
 
 const game = new Phaser.Game(gameConfig);

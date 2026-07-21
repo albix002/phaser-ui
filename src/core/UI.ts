@@ -1,12 +1,13 @@
 import Phaser from 'phaser';
-import UIElement from './UIelement.js';
+import UIElement, { ILayoutNode } from './UIelement.js';
 
 /**
  * Root container of the UI system.
  *
  * Responsible for validating UI elements every frame.
  */
-export default class UI extends Phaser.GameObjects.Container {
+export default class UI extends Phaser.GameObjects.Container implements ILayoutNode {
+  private _dirty = true;
   constructor(scene: Phaser.Scene) {
     super(scene);
 
@@ -14,17 +15,25 @@ export default class UI extends Phaser.GameObjects.Container {
     this.addToUpdateList();
   }
 
-  public preUpdate(): void {
+  public validateLayout() {
+    if (!this._dirty) return;
+
     this.validateChildren();
+    this._dirty = false;
   }
 
-  public validating() {
-    this.validateChildren();
+  public preUpdate(): void {
+    this.validateLayout();
+  }
+
+  public invalidateLayout(): void {
+    if (this._dirty) return;
+    this._dirty = true;
   }
 
   private validateChildren(): void {
     for (const child of this.list) {
-      if (child instanceof UIElement) child.validate();
+      if (child instanceof UIElement) child.validateLayout();
     }
   }
 
@@ -32,22 +41,18 @@ export default class UI extends Phaser.GameObjects.Container {
     let maxWidth = 0;
 
     for (const element of elements) {
-      element.validate();
+      element.validateLayout();
       maxWidth = Math.max(maxWidth, element.width);
     }
 
     return maxWidth;
   }
 
-  //   private validateChildren(container: Phaser.GameObjects.Container): void {
-  //     for (const child of container.list) {
-  //         if (child instanceof UIElement) {
-  //             child.validate();
-  //         }
-
-  //         if (child instanceof Phaser.GameObjects.Container) {
-  //             this.validateChildren(child);
-  //         }
-  //     }
-  // }
+  /**
+   * @internal
+   * Used only for debugging and testing.
+   */
+  public getDirty(): boolean {
+    return this._dirty;
+  }
 }

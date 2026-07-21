@@ -1,6 +1,15 @@
 import Phaser from 'phaser';
 
-export default abstract class UIElement extends Phaser.GameObjects.Container {
+export interface ILayoutNode {
+  invalidateLayout(): void;
+  validateLayout(): void;
+}
+
+export function isLayoutNode(obj: unknown): obj is ILayoutNode {
+  return obj != null && typeof (obj as any).invalidateLayout === 'function';
+}
+
+export default abstract class UIElement extends Phaser.GameObjects.Container implements ILayoutNode {
   protected _dirty = true;
   protected _enabled = true;
 
@@ -10,14 +19,16 @@ export default abstract class UIElement extends Phaser.GameObjects.Container {
     scene.add.existing(this);
   }
 
-  protected invalidate(): void {
+  public invalidateLayout(): void {
+    if (this._dirty) return;
     this._dirty = true;
+
+    const parent = this.parentContainer;
+    if (isLayoutNode(parent)) parent.invalidateLayout();
   }
 
-  public validate(): void {
-    if (!this._dirty) {
-      return;
-    }
+  public validateLayout(): void {
+    if (!this._dirty) return;
 
     this.layout();
     this._dirty = false;
@@ -47,7 +58,21 @@ export default abstract class UIElement extends Phaser.GameObjects.Container {
   }
 
   public getSize(): { w: number; h: number } {
-    this.validate();
+    this.validateLayout();
     return { w: this.width, h: this.height };
+  }
+
+  protected setMeasuredSize(width: number, height: number): void {
+    if (width === this.width && height === this.height) {
+      return;
+    }
+
+    super.setSize(width, height);
+
+    const parent = this.parentContainer;
+
+    if (isLayoutNode(parent)) {
+      parent.invalidateLayout();
+    }
   }
 }

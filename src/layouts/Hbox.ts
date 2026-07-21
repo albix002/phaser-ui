@@ -16,7 +16,7 @@ export default class Hbox extends Layout {
       if (index > 0) {
         x += this._spacing;
       }
-      child.validate();
+      child.validateLayout();
 
       child.x = x;
       child.y = y;

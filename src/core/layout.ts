@@ -12,7 +12,7 @@ export default abstract class Layout extends UIElement {
     if (this._spacing === value) return this;
     this._spacing = value;
 
-    this.invalidate();
+    this.invalidateLayout();
     return this;
   }
 
@@ -20,14 +20,14 @@ export default abstract class Layout extends UIElement {
     if (this._padding === value) return this;
     this._padding = value;
 
-    this.invalidate();
+    this.invalidateLayout();
     return this;
   }
 
   public addChild(child: UIElement): this {
     super.add(child);
 
-    this.invalidate();
+    this.invalidateLayout();
 
     return this;
   }
@@ -35,14 +35,14 @@ export default abstract class Layout extends UIElement {
   public removeChild(child: UIElement): this {
     super.remove(child);
 
-    this.invalidate();
+    this.invalidateLayout();
     return this;
   }
 
   public clearChildren(): this {
     super.removeAll();
 
-    this.invalidate();
+    this.invalidateLayout();
 
     return this;
   }
