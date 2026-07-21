@@ -1,0 +1,17 @@
+{
+  "name": "phaser-ui-sandbox",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "phaser": "^4.1.0",
+    "phaser-ui": "file:../.."
+  },
+  "devDependencies": {
+    "vite": "^8.1.5"
+  }
+}
