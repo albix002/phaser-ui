@@ -115,7 +115,7 @@ const panelStyleBase: PanelStyle = {
 };
 
 const labelStyleBase: LabelStyle = {
-  color: '#421313',
+  color: '#ffffff',
   fontSize: 30,
   fontFamily: 'Pixeloid',
 };
