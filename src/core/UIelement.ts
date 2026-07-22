@@ -62,17 +62,34 @@ export default abstract class UIElement extends Phaser.GameObjects.Container imp
     return { w: this.width, h: this.height };
   }
 
-  protected setMeasuredSize(width: number, height: number): void {
-    if (width === this.width && height === this.height) {
-      return;
-    }
+ protected setMeasuredSize(width: number, height: number): void {
+    if (width === this.width && height === this.height) return;
 
     super.setSize(width, height);
 
-    const parent = this.parentContainer;
+    this.onSizeChanged();
+    this.invalidateLayout();
 
+    const parent = this.parentContainer;
     if (isLayoutNode(parent)) {
-      parent.invalidateLayout();
+        parent.invalidateLayout();
     }
   }
+
+  public override setVisible(value: boolean): this {
+    if (this.visible === value) {
+        return this;
+    }
+
+    super.setVisible(value);
+
+    const parent = this.parentContainer;
+    if (isLayoutNode(parent)) {
+        parent.invalidateLayout();
+    }
+
+    return this;
+}
+ protected onSizeChanged() {}
+
 }

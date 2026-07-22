@@ -1,4 +1,4 @@
-import Layout from '../core/layout.js';
+import Layout, { ContentAlignment, HorizontalAlignment, VerticalAlignment } from '../core/layout.js';
 import UIElement from '../core/UIelement.js';
 import { DefaultTheme, PanelStyle } from '../themes/Theme.js';
 import Phaser from 'phaser';
@@ -10,8 +10,10 @@ export interface PanelOptions {
   width?: number;
   height?: number;
   autoSize?: boolean;
+  padding?: number;
 
   style?: PanelStyle;
+  alignment?: Partial<ContentAlignment>;
 }
 
 export default class Panel extends UIElement {
@@ -21,10 +23,45 @@ export default class Panel extends UIElement {
   private _autoSize: boolean;
   private _contentPadding = 0;
   private _backgroundDirty = true;
+  private _padding: number | null = null;
+
+  private _alignment: ContentAlignment = {
+    horizontal: 'left',
+    vertical: 'top',
+  };
+  private align(alignment: HorizontalAlignment, container: number, content: number): number {
+    switch (alignment) {
+      case 'left':
+        return -container / 2;
+
+      case 'center':
+        return -content / 2;
+
+      case 'right':
+        return container / 2 - content;
+    }
+  }
+
+  private valign(alignment: VerticalAlignment, container: number, content: number): number {
+    switch (alignment) {
+      case 'top':
+        return -container / 2;
+
+      case 'center':
+        return -content / 2;
+
+      case 'bottom':
+        return container / 2 - content;
+    }
+  }
 
   constructor(scene: Phaser.Scene, options: PanelOptions) {
     super(scene, options.x ?? 0, options.y ?? 0);
-
+    this._alignment = {
+      horizontal: 'left',
+      vertical: 'top',
+      ...options.alignment,
+    };
     this._graphics = new Phaser.GameObjects.Graphics(scene);
     this.add(this._graphics);
 
@@ -32,12 +69,14 @@ export default class Panel extends UIElement {
 
     super.setSize(options.width ?? 0, options.height ?? 0);
     this._autoSize = options.autoSize ?? true;
+    this._padding = options.padding ?? null;
   }
 
   public setLayout(layout: Layout): this {
     this.detachLayout();
 
     this._layout = layout;
+    if (this._padding !== null) this._layout.setPadding(this._padding);
     this.add(layout);
 
     this.invalidateLayout();
@@ -107,9 +146,16 @@ export default class Panel extends UIElement {
     this._autoSize = false;
     return this;
   }
+
   private updateLayoutPosition(size: { w: number; h: number }) {
-    this._layout!.setPosition(-this.width / 2 + this._contentPadding / 2, -this.height / 2 + this._contentPadding / 2);
-    console.log('panel', this.width, this.height, 'layout', this._layout?.x, this._layout?.y);
+    if (this._autoSize) {
+      this.getLayout().setPosition(-this.width / 2, -this.height / 2);
+      return;
+    }
+    this.getLayout().setPosition(
+      this.align(this._alignment.horizontal, this.width, size.w),
+      this.valign(this._alignment.vertical, this.height, size.h),
+    );
   }
 
   public addChild(child: UIElement): this {
@@ -176,6 +222,21 @@ export default class Panel extends UIElement {
 
     this.invalidateLayout();
 
+    return this;
+  }
+
+  public setPadding(padding: number): this {
+    this.getLayout().setPadding(padding);
+    return this;
+  }
+
+  public setAlignment(alignment: Partial<ContentAlignment>): this {
+    this._alignment = {
+      ...this._alignment,
+      ...alignment,
+    };
+
+    this.invalidateLayout();
     return this;
   }
 }

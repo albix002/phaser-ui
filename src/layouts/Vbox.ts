@@ -1,5 +1,4 @@
 import Layout from '../core/layout.js';
-import UIElement from '../core/UIelement.js';
 
 export default class Vbox extends Layout {
   protected override _spacing = 15;
@@ -9,21 +8,21 @@ export default class Vbox extends Layout {
     let y = this._padding;
     let maxWidth = 0;
 
-    for (const child of this.list) {
-      if (!(child instanceof UIElement)) continue;
-
+    for (const child of this.visibleChildren()) {
       child.validateLayout();
       maxWidth = Math.max(maxWidth, child.width);
     }
 
     const centerX = this._padding + maxWidth / 2;
 
-    for (const [index, child] of this.list.entries()) {
-      if (!(child instanceof UIElement)) continue;
+    let first = true;
 
-      if (index > 0) {
+    for (const child of this.visibleChildren()) {
+      if (!first) {
         y += this._spacing;
       }
+
+      first = false;
 
       const centerY = y + child.height / 2;
 

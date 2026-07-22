@@ -1,5 +1,9 @@
 export type ButtonVariant = keyof typeof DefaultTheme.button;
-
+export type DeepPartial<T> = {
+    [K in keyof T]?: T[K] extends object
+        ? DeepPartial<T[K]>
+        : T[K];
+};
 function createButtonStyle(colors: { normal: number; hover: number; pressed: number }): ButtonStyle {
   return {
     padding: 10,
@@ -28,6 +32,34 @@ function createButtonStyle(colors: { normal: number; hover: number; pressed: num
       },
     },
   };
+}
+
+export function merge<T>(base: T, override?: DeepPartial<T>): T {
+  if (!override) {
+    return structuredClone(base);
+  }
+
+  const result = structuredClone(base);
+
+  mergeInto(result, override);
+
+  return result;
+}
+
+export function mergeInto(target: any, source: any): void {
+  for (const key in source) {
+    const value = source[key];
+
+    if (
+      value &&
+      typeof value === 'object' &&
+      !Array.isArray(value)
+    ) {
+      mergeInto(target[key], value);
+    } else {
+      target[key] = value;
+    }
+  }
 }
 
 export interface PanelStyle {
@@ -83,7 +115,7 @@ const panelStyleBase: PanelStyle = {
 };
 
 const labelStyleBase: LabelStyle = {
-  color: '#ffffff',
+  color: '#421313',
   fontSize: 30,
   fontFamily: 'Pixeloid',
 };

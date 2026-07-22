@@ -1,6 +1,15 @@
 import UIElement from './UIelement.js';
 import Phaser from 'phaser';
 
+export type HorizontalAlignment = 'left' | 'center' | 'right';
+export type VerticalAlignment = 'top' | 'center' | 'bottom';
+
+
+export interface ContentAlignment {
+    horizontal: HorizontalAlignment;
+    vertical: VerticalAlignment;
+}
+
 export default abstract class Layout extends UIElement {
   constructor(scene: Phaser.Scene, x = 0, y = 0) {
     super(scene, x, y);
@@ -58,6 +67,14 @@ export default abstract class Layout extends UIElement {
   }
 
   protected abstract override layout(): void;
+
+protected *visibleChildren(): Iterable<UIElement> {
+    for (const child of this.list) {
+        if (child instanceof UIElement && child.visible) {
+            yield child;
+        }
+    }
+}
 
   /**
    * @deprecated

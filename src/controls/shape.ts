@@ -30,12 +30,17 @@ export default class Shape extends UIElement {
     return this;
   }
 
-  public override setMeasuredSize(width: number, height: number): this {
+  protected override onSizeChanged(): void {
+    this._dirtyGraphics = true;
+  }
+  public override setMeasuredSize(width: number, height: number): void {
+    const changed = width !== this.width || height !== this.height;
+
     super.setMeasuredSize(width, height);
 
-    this._dirtyGraphics = true;
-
-    return this;
+    if (changed) {
+      this._dirtyGraphics = true;
+    }
   }
 
   private redraw(): void {
