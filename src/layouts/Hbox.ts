@@ -1,31 +1,66 @@
-import Layout from '../core/layout.js';
-import UIElement from '../core/UIelement.js';
+import Layout, { VerticalAlignment } from '../core/layout.js';
+
+interface HboxOptions {
+  x?: number;
+  y?: number;
+
+  alignment?: VerticalAlignment;
+  padding?: number;
+  spacing?: number;
+}
 
 export default class Hbox extends Layout {
+  protected override _padding = 10;
+  protected override _spacing = 15;
+
+  private _alignment: VerticalAlignment;
+
+  constructor(scene: Phaser.Scene, options: HboxOptions) {
+    super(scene, options.x ?? 0, options.y ?? 0);
+
+    this._spacing = options.spacing ?? 15;
+    this._padding = options.padding ?? 15;
+    this._alignment = options.alignment ?? 'center';
+  }
   protected override layout(): void {
     let x = this._padding;
-    const y = this._padding;
-
     let maxHeight = 0;
 
-    for (const [index, child] of this.list.entries()) {
-      if (!(child instanceof UIElement)) {
-        continue;
-      }
-
-      if (index > 0) {
-        x += this._spacing;
-      }
+    for (const child of this.visibleChildren()) {
       child.validateLayout();
+      switch (this._alignment) {
+        case 'top':
+          child.y = this._padding;
+          break;
 
-      child.x = x;
-      child.y = y;
+        case 'center':
+          child.y = this._padding + (maxHeight - child.width) / 2;
+          break;
 
-      maxHeight = Math.max(maxHeight, child.height);
-
-      x += child.width;
+        case 'bottom':
+          child.y = this._padding + maxHeight - child.width;
+          break;
+      }
     }
 
-    this.setSize(x + this._padding, maxHeight + this._padding * 2);
+    const centerX = this._padding + maxHeight / 2;
+
+    let first = true;
+
+    for (const child of this.visibleChildren()) {
+      if (!first) {
+        x += this._spacing;
+      }
+
+      first = false;
+
+      const centerY = x + child.height / 2;
+
+      child.setPosition(centerX, centerY);
+
+      x += child.height;
+    }
+
+    this.setSize(maxHeight + this._padding * 2, x + this._padding);
   }
 }

@@ -1,24 +1,43 @@
 import Layout from '../core/layout.js';
-import UIElement from '../core/UIelement.js';
 export default class Hbox extends Layout {
+    _padding = 10;
+    _spacing = 15;
+    _alignment;
+    constructor(scene, options) {
+        super(scene, options.x ?? 0, options.y ?? 0);
+        this._spacing = options.spacing ?? 15;
+        this._padding = options.padding ?? 15;
+        this._alignment = options.alignment ?? 'center';
+    }
     layout() {
         let x = this._padding;
-        const y = this._padding;
         let maxHeight = 0;
-        for (const [index, child] of this.list.entries()) {
-            if (!(child instanceof UIElement)) {
-                continue;
+        for (const child of this.visibleChildren()) {
+            child.validateLayout();
+            switch (this._alignment) {
+                case 'top':
+                    child.y = this._padding;
+                    break;
+                case 'center':
+                    child.y = this._padding + (maxHeight - child.width) / 2;
+                    break;
+                case 'bottom':
+                    child.y = this._padding + maxHeight - child.width;
+                    break;
             }
-            if (index > 0) {
+        }
+        const centerX = this._padding + maxHeight / 2;
+        let first = true;
+        for (const child of this.visibleChildren()) {
+            if (!first) {
                 x += this._spacing;
             }
-            child.validateLayout();
-            child.x = x;
-            child.y = y;
-            maxHeight = Math.max(maxHeight, child.height);
-            x += child.width;
+            first = false;
+            const centerY = x + child.height / 2;
+            child.setPosition(centerX, centerY);
+            x += child.height;
         }
-        this.setSize(x + this._padding, maxHeight + this._padding * 2);
+        this.setSize(maxHeight + this._padding * 2, x + this._padding);
     }
 }
 //# sourceMappingURL=Hbox.js.map
