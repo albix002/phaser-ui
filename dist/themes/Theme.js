@@ -1,28 +1,4 @@
-function createButtonStyle(colors) {
-    return {
-        padding: 10,
-        normal: {
-            label: labelStyleBase,
-            panel: { ...panelStyleBase, background: colors.normal },
-        },
-        hover: {
-            label: labelStyleBase,
-            panel: { ...panelStyleBase, background: colors.hover },
-        },
-        pressed: {
-            label: labelStyleBase,
-            panel: { ...panelStyleBase, background: colors.pressed },
-        },
-        disabled: {
-            label: labelStyleBase,
-            panel: {
-                ...panelStyleBase,
-                alpha: 0.4,
-                background: colors.normal,
-            },
-        },
-    };
-}
+import { createButtonStyle } from './buttonStyle.js';
 export function merge(base, override) {
     if (!override) {
         return structuredClone(base);
@@ -34,9 +10,7 @@ export function merge(base, override) {
 export function mergeInto(target, source) {
     for (const key in source) {
         const value = source[key];
-        if (value &&
-            typeof value === 'object' &&
-            !Array.isArray(value)) {
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
             mergeInto(target[key], value);
         }
         else {
@@ -44,7 +18,7 @@ export function mergeInto(target, source) {
         }
     }
 }
-const panelStyleBase = {
+export const panelStyleBase = {
     alpha: 0.6,
     background: 0x222222,
     border: 0xffffff,
@@ -52,7 +26,7 @@ const panelStyleBase = {
     radius: 8,
     padding: 12,
 };
-const labelStyleBase = {
+export const labelStyleBase = {
     color: '#ffffff',
     fontSize: 30,
     fontFamily: 'Pixeloid',

@@ -1,38 +1,9 @@
+import { ButtonStyle, createButtonStyle } from './buttonStyle.js';
+
 export type ButtonVariant = keyof typeof DefaultTheme.button;
 export type DeepPartial<T> = {
-    [K in keyof T]?: T[K] extends object
-        ? DeepPartial<T[K]>
-        : T[K];
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
 };
-function createButtonStyle(colors: { normal: number; hover: number; pressed: number }): ButtonStyle {
-  return {
-    padding: 10,
-
-    normal: {
-      label: labelStyleBase,
-      panel: { ...panelStyleBase, background: colors.normal },
-    },
-
-    hover: {
-      label: labelStyleBase,
-      panel: { ...panelStyleBase, background: colors.hover },
-    },
-
-    pressed: {
-      label: labelStyleBase,
-      panel: { ...panelStyleBase, background: colors.pressed },
-    },
-
-    disabled: {
-      label: labelStyleBase,
-      panel: {
-        ...panelStyleBase,
-        alpha: 0.4,
-        background: colors.normal,
-      },
-    },
-  };
-}
 
 export function merge<T>(base: T, override?: DeepPartial<T>): T {
   if (!override) {
@@ -50,11 +21,7 @@ export function mergeInto(target: any, source: any): void {
   for (const key in source) {
     const value = source[key];
 
-    if (
-      value &&
-      typeof value === 'object' &&
-      !Array.isArray(value)
-    ) {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
       mergeInto(target[key], value);
     } else {
       target[key] = value;
@@ -77,20 +44,6 @@ export interface LabelStyle {
   fontFamily: string;
 }
 
-export interface ButtonVisualStyle {
-  panel: PanelStyle;
-  label: LabelStyle;
-}
-
-export interface ButtonStyle {
-  padding: number;
-
-  normal: ButtonVisualStyle;
-  hover: ButtonVisualStyle;
-  pressed: ButtonVisualStyle;
-  disabled: ButtonVisualStyle;
-}
-
 export interface Theme {
   panel: PanelStyle;
   label: LabelStyle;
@@ -105,7 +58,7 @@ export interface Theme {
   };
 }
 
-const panelStyleBase: PanelStyle = {
+export const panelStyleBase: PanelStyle = {
   alpha: 0.6,
   background: 0x222222,
   border: 0xffffff,
@@ -114,7 +67,7 @@ const panelStyleBase: PanelStyle = {
   padding: 12,
 };
 
-const labelStyleBase: LabelStyle = {
+export const labelStyleBase: LabelStyle = {
   color: '#ffffff',
   fontSize: 30,
   fontFamily: 'Pixeloid',

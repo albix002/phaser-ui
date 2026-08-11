@@ -9,7 +9,7 @@ export interface PanelOptions {
     height?: number;
     autoSize?: boolean;
     padding?: number;
-    style?: PanelStyle;
+    style?: Partial<PanelStyle>;
     alignment?: Partial<ContentAlignment>;
 }
 export default class Panel extends UIElement {
@@ -40,7 +40,7 @@ export default class Panel extends UIElement {
     getChildCount(): number;
     hasChildren(): boolean;
     hasLayout(): boolean;
-    setStyle(panel: PanelStyle): this;
+    setStyle(style: Partial<PanelStyle>): this;
     getDirty(): boolean;
     setAutoSize(enabled: boolean, padding?: number): this;
     setPadding(padding: number): this;

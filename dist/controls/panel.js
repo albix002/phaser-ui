@@ -1,5 +1,5 @@
 import UIElement from '../core/UIelement.js';
-import { DefaultTheme } from '../themes/Theme.js';
+import { DefaultTheme, merge } from '../themes/Theme.js';
 import Phaser from 'phaser';
 export default class Panel extends UIElement {
     _graphics;
@@ -42,7 +42,8 @@ export default class Panel extends UIElement {
         };
         this._graphics = new Phaser.GameObjects.Graphics(scene);
         this.add(this._graphics);
-        this._style = options.style ?? DefaultTheme.panel;
+        const base = DefaultTheme.panel;
+        this._style = merge(base, options.style);
         super.setSize(options.width ?? 0, options.height ?? 0);
         this._autoSize = options.autoSize ?? true;
         this._padding = options.padding ?? null;
@@ -85,7 +86,6 @@ export default class Panel extends UIElement {
         }
     }
     drawBackground() {
-        console.log('draw', this.width, this.height);
         this._graphics.clear();
         this._graphics.fillStyle(this._style.background, this._style.alpha);
         this._graphics.lineStyle(this._style.borderWidth, this._style.border, this._style.alpha);
@@ -145,8 +145,8 @@ export default class Panel extends UIElement {
     hasLayout() {
         return this._layout !== null;
     }
-    setStyle(panel) {
-        this._style = panel;
+    setStyle(style) {
+        this._style = merge(this._style, style);
         this._backgroundDirty = true;
         this.invalidateLayout();
         return this;

@@ -16,6 +16,7 @@ export default class Button extends UIElement {
     _style;
     _variant;
     _clickListeners = [];
+    borderWidth;
     _widthExplicit = null;
     _heightExplicit = null;
     constructor(scene, options) {
@@ -24,6 +25,7 @@ export default class Button extends UIElement {
         const base = DefaultTheme.button[this._variant];
         this._style = merge(base, options.style);
         this._background = new Shape(scene, this._style.normal.panel);
+        this.borderWidth = this._style.borderWidth;
         this._label = new Label(scene, {
             text: options.text ?? '',
         });
@@ -79,11 +81,6 @@ export default class Button extends UIElement {
         this._label.validateLayout();
         const padding = this._style.padding * 2;
         const width = this._widthExplicit ?? this._label.width + padding;
-        console.log(this.getText(), {
-            explicit: this._widthExplicit,
-            label: this._label.width,
-            final: width,
-        });
         const height = this._heightExplicit ?? this._label.height + padding;
         this._background.setMeasuredSize(width, height);
         this._background.validateLayout();
@@ -106,7 +103,7 @@ export default class Button extends UIElement {
     }
     setStyle(style) {
         this._label.setStyle(style.label);
-        this._background.setStyle(style.panel);
+        this._background.setStyle(merge(style.panel, { borderWidth: this.borderWidth }));
         this.invalidateLayout();
     }
     changeState(state) {

@@ -1,4 +1,5 @@
 import UIElement from '../core/UIelement.js';
+import { DefaultTheme, merge } from '../themes/Theme.js';
 export default class Shape extends UIElement {
     _graphics;
     _style;
@@ -7,7 +8,7 @@ export default class Shape extends UIElement {
         super(scene, x, y);
         this._graphics = scene.add.graphics();
         this.add(this._graphics);
-        this._style = style;
+        this._style = merge(DefaultTheme.panel, style);
     }
     layout() {
         if (!this._dirtyGraphics)
@@ -16,7 +17,7 @@ export default class Shape extends UIElement {
         this._dirtyGraphics = false;
     }
     setStyle(style) {
-        this._style = style;
+        this._style = merge(this._style, style);
         this._dirtyGraphics = true;
         this.invalidateLayout();
         return this;

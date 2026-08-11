@@ -1,6 +1,7 @@
 import UIElement from '../core/UIelement.js';
 import Phaser from 'phaser';
-import { ButtonStyle, ButtonVariant, ButtonVisualStyle, DeepPartial } from '../themes/Theme.js';
+import { ButtonVariant, DeepPartial } from '../themes/Theme.js';
+import { ButtonStyle, ButtonVisualStyle } from '../themes/buttonStyle.ts';
 export declare enum ButtonState {
     Normal = 0,
     Hover = 1,
@@ -21,6 +22,7 @@ export default class Button extends UIElement {
     private readonly _style;
     private _variant;
     private readonly _clickListeners;
+    borderWidth: number;
     private _widthExplicit;
     private _heightExplicit;
     constructor(scene: Phaser.Scene, options: ButtonOptions);

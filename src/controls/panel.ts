@@ -1,6 +1,6 @@
 import Layout, { ContentAlignment, HorizontalAlignment, VerticalAlignment } from '../core/layout.js';
 import UIElement from '../core/UIelement.js';
-import { DefaultTheme, PanelStyle } from '../themes/Theme.js';
+import { DefaultTheme, merge, PanelStyle } from '../themes/Theme.js';
 import Phaser from 'phaser';
 
 export interface PanelOptions {
@@ -12,7 +12,7 @@ export interface PanelOptions {
   autoSize?: boolean;
   padding?: number;
 
-  style?: PanelStyle;
+  style?: Partial<PanelStyle>;
   alignment?: Partial<ContentAlignment>;
 }
 
@@ -64,8 +64,8 @@ export default class Panel extends UIElement {
     };
     this._graphics = new Phaser.GameObjects.Graphics(scene);
     this.add(this._graphics);
-
-    this._style = options.style ?? DefaultTheme.panel;
+    const base = DefaultTheme.panel;
+    this._style = merge(base, options.style);
 
     super.setSize(options.width ?? 0, options.height ?? 0);
     this._autoSize = options.autoSize ?? true;
@@ -119,15 +119,11 @@ export default class Panel extends UIElement {
   }
 
   private drawBackground() {
-    console.log('draw', this.width, this.height);
     this._graphics.clear();
 
     this._graphics.fillStyle(this._style.background, this._style.alpha);
-
     this._graphics.lineStyle(this._style.borderWidth, this._style.border, this._style.alpha);
-
     this._graphics.fillRoundedRect(-this.width / 2, -this.height / 2, this.width, this.height, this._style.radius);
-
     this._graphics.strokeRoundedRect(-this.width / 2, -this.height / 2, this.width, this.height, this._style.radius);
   }
   public override setMeasuredSize(width: number, height: number) {
@@ -200,11 +196,12 @@ export default class Panel extends UIElement {
     return this._layout !== null;
   }
 
-  public setStyle(panel: PanelStyle): this {
-    this._style = panel;
+  public setStyle(style: Partial<PanelStyle>): this {
+    this._style = merge(this._style, style);
 
     this._backgroundDirty = true;
     this.invalidateLayout();
+
     return this;
   }
 

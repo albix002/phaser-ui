@@ -1,19 +1,19 @@
 import Phaser from 'phaser';
 import UIElement from '../core/UIelement.js';
-import { PanelStyle } from '../themes/Theme.js';
+import { DefaultTheme, merge, PanelStyle } from '../themes/Theme.js';
 
 export default class Shape extends UIElement {
   private readonly _graphics: Phaser.GameObjects.Graphics;
   private _style: PanelStyle;
   private _dirtyGraphics = true;
 
-  constructor(scene: Phaser.Scene, style: PanelStyle, x = 0, y = 0) {
+  constructor(scene: Phaser.Scene, style: Partial<PanelStyle>, x = 0, y = 0) {
     super(scene, x, y);
 
     this._graphics = scene.add.graphics();
     this.add(this._graphics);
 
-    this._style = style;
+    this._style = merge(DefaultTheme.panel, style);
   }
 
   protected override layout(): void {
@@ -23,8 +23,8 @@ export default class Shape extends UIElement {
     this._dirtyGraphics = false;
   }
 
-  public setStyle(style: PanelStyle): this {
-    this._style = style;
+  public setStyle(style: Partial<PanelStyle>): this {
+    this._style = merge(this._style, style);
     this._dirtyGraphics = true;
     this.invalidateLayout();
     return this;

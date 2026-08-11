@@ -5,9 +5,9 @@ export default class Shape extends UIElement {
     private readonly _graphics;
     private _style;
     private _dirtyGraphics;
-    constructor(scene: Phaser.Scene, style: PanelStyle, x?: number, y?: number);
+    constructor(scene: Phaser.Scene, style: Partial<PanelStyle>, x?: number, y?: number);
     protected layout(): void;
-    setStyle(style: PanelStyle): this;
+    setStyle(style: Partial<PanelStyle>): this;
     protected onSizeChanged(): void;
     setMeasuredSize(width: number, height: number): void;
     private redraw;

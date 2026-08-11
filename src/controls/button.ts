@@ -1,8 +1,9 @@
 import UIElement from '../core/UIelement.js';
 import Phaser from 'phaser';
 import Label from './label.js';
-import { ButtonStyle, ButtonVariant, ButtonVisualStyle, DeepPartial, DefaultTheme, merge } from '../themes/Theme.js';
+import { ButtonVariant, DeepPartial, DefaultTheme, merge } from '../themes/Theme.js';
 import Shape from './shape.js';
+import { ButtonStyle, ButtonVisualStyle } from '../themes/buttonStyle.ts';
 
 export enum ButtonState {
   Normal,
@@ -28,6 +29,7 @@ export default class Button extends UIElement {
   private _variant: ButtonVariant | 'red';
   private readonly _clickListeners: (() => void)[] = [];
 
+  public borderWidth: number;
   private _widthExplicit: number | null = null;
   private _heightExplicit: number | null = null;
 
@@ -37,7 +39,7 @@ export default class Button extends UIElement {
     const base = DefaultTheme.button[this._variant];
     this._style = merge(base, options.style);
     this._background = new Shape(scene, this._style.normal.panel);
-
+    this.borderWidth = this._style.borderWidth;
     this._label = new Label(scene, {
       text: options.text ?? '',
     });
@@ -91,11 +93,6 @@ export default class Button extends UIElement {
     const padding = this._style.padding * 2;
 
     const width = this._widthExplicit ?? this._label.width + padding;
-    console.log(this.getText(), {
-      explicit: this._widthExplicit,
-      label: this._label.width,
-      final: width,
-    });
     const height = this._heightExplicit ?? this._label.height + padding;
 
     this._background.setMeasuredSize(width, height);
@@ -124,7 +121,7 @@ export default class Button extends UIElement {
   }
   public setStyle(style: ButtonVisualStyle): void {
     this._label.setStyle(style.label);
-    this._background.setStyle(style.panel);
+    this._background.setStyle(merge(style.panel, { borderWidth: this.borderWidth }));
 
     this.invalidateLayout();
   }

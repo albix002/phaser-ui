@@ -11,6 +11,9 @@ export default class DemoScene extends Phaser.Scene {
     const panel = new Panel(this, {
       x: 50,
       y: 50,
+      style: {
+        borderWidth: 0,
+      },
     });
 
     panel.setLayout(new VBox(this));
@@ -29,6 +32,9 @@ export default class DemoScene extends Phaser.Scene {
       y: 200,
       text: 'Increment',
       variant: 'purple',
+      style: {
+        borderWidth: 0,
+      },
     });
 
     let value = 0;
@@ -48,6 +54,9 @@ export default class DemoScene extends Phaser.Scene {
       y: 300,
       text: 'Play',
       variant: 'purple',
+      style: {
+        borderWidth: 0,
+      },
     });
 
     button2.onClick(() => {

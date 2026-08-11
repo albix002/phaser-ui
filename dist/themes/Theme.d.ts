@@ -1,3 +1,4 @@
+import { ButtonStyle } from './buttonStyle.js';
 export type ButtonVariant = keyof typeof DefaultTheme.button;
 export type DeepPartial<T> = {
     [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
@@ -17,17 +18,6 @@ export interface LabelStyle {
     fontSize: number;
     fontFamily: string;
 }
-export interface ButtonVisualStyle {
-    panel: PanelStyle;
-    label: LabelStyle;
-}
-export interface ButtonStyle {
-    padding: number;
-    normal: ButtonVisualStyle;
-    hover: ButtonVisualStyle;
-    pressed: ButtonVisualStyle;
-    disabled: ButtonVisualStyle;
-}
 export interface Theme {
     panel: PanelStyle;
     label: LabelStyle;
@@ -40,5 +30,7 @@ export interface Theme {
         orange: ButtonStyle;
     };
 }
+export declare const panelStyleBase: PanelStyle;
+export declare const labelStyleBase: LabelStyle;
 export declare const DefaultTheme: Theme;
 //# sourceMappingURL=Theme.d.ts.map
