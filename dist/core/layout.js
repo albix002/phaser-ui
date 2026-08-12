@@ -56,7 +56,7 @@ export default class Layout extends UIElement {
         return this;
     }
     getChildren() {
-        return this.UIchildren();
+        return [...this.UIchildren()];
     }
     getChildCount() {
         return this.list.length;

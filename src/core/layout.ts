@@ -93,7 +93,7 @@ export default abstract class Layout extends UIElement {
   }
 
   public getChildren(): Iterable<UIElement> {
-    return this.UIchildren();
+    return [...this.UIchildren()];
   }
   public getChildCount(): number {
     return this.list.length;
