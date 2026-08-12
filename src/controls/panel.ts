@@ -178,7 +178,7 @@ export default class Panel extends UIElement {
     return this._layout;
   }
 
-  public getChildren(): Phaser.GameObjects.GameObject[] {
+  public getChildren(): Iterable<UIElement> {
     return this.getLayout().getChildren();
   }
 

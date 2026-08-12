@@ -92,8 +92,8 @@ export default abstract class Layout extends UIElement {
     return this;
   }
 
-  public getChildren(): Phaser.GameObjects.GameObject[] {
-    return [...this.list];
+  public getChildren(): Iterable<UIElement> {
+    return this.UIchildren();
   }
   public getChildCount(): number {
     return this.list.length;
@@ -109,6 +109,12 @@ export default abstract class Layout extends UIElement {
       if (child instanceof UIElement && child.visible) {
         yield child;
       }
+    }
+  }
+
+  protected *UIchildren(): Iterable<UIElement> {
+    for (const child of this.list) {
+      if (child instanceof UIElement) yield child;
     }
   }
 
