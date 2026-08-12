@@ -1,7 +1,10 @@
 import Phaser from 'phaser';
-import { UI, Panel, VBox, Label, Button } from '../../../dist/index.js';
+import { UI, Panel, Vbox, Label, Button, Hbox } from '../../../dist/index.js';
 
 export default class DemoScene extends Phaser.Scene {
+  constructor() {
+    super('Demo');
+  }
   create() {
     this.ui = new UI(this);
 
@@ -16,7 +19,7 @@ export default class DemoScene extends Phaser.Scene {
       },
     });
 
-    panel.setLayout(new VBox(this));
+    panel.setLayout(new Vbox(this));
 
     const label = new Label(this, {
       text: '0',
@@ -66,6 +69,54 @@ export default class DemoScene extends Phaser.Scene {
       console.log('button2:', button2.width, button2.height);
     });
 
-    this.ui.add([panel, button, button2]);
+    const panelLayout = new Panel(this, {
+      x: this.scale.width / 2,
+      y: this.scale.height / 2,
+    });
+
+    const box = new Vbox(this, {
+      alignment: {
+        horizontal: 'center',
+      },
+
+      enableDrawBox: true,
+    });
+
+    panelLayout
+      .setLayout(box)
+      .addChild(
+        new Label(this, {
+          text: "Looks like I've got an Ace showing. Want to take insurance?",
+          style: {
+            color: '#d3c100',
+            fontFamily: 'Pixeloid',
+            fontSize: 20,
+          },
+        }),
+      )
+      .addChild(
+        new Label(this, {
+          text: 'Insurance costs half of your original bet and pays 2:1 if I have Blackjack.',
+          style: {
+            color: '#d3c100',
+            fontFamily: 'Pixeloid',
+            fontSize: 20,
+          },
+        }),
+      )
+      .addChild(
+        new Hbox(this, {
+          spacing: 50,
+        })
+          .addChild(
+            new Button(this, {
+              text: 'Yes',
+              variant: 'green',
+            }),
+          )
+          .addChild(new Button(this, { text: 'No' })),
+      );
+
+    this.ui.add([panel, button, button2, panelLayout]);
   }
 }

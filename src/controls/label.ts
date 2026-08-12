@@ -33,7 +33,6 @@ export default class Label extends UIElement {
 
   protected override layout(): void {
     this.setMeasuredSize(this._textObject.width, this._textObject.height);
-    console.log('label', this.width, this.height, this.x, this.y);
   }
 
   public setText(text: string): this {

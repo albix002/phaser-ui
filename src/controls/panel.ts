@@ -25,10 +25,7 @@ export default class Panel extends UIElement {
   private _backgroundDirty = true;
   private _padding: number | null = null;
 
-  private _alignment: ContentAlignment = {
-    horizontal: 'left',
-    vertical: 'top',
-  };
+  private _alignment: ContentAlignment;
   private align(alignment: HorizontalAlignment, container: number, content: number): number {
     switch (alignment) {
       case 'left':
@@ -55,21 +52,22 @@ export default class Panel extends UIElement {
     }
   }
 
-  constructor(scene: Phaser.Scene, options: PanelOptions) {
-    super(scene, options.x ?? 0, options.y ?? 0);
+  constructor(scene: Phaser.Scene, options?: PanelOptions) {
+    super(scene, options?.x ?? 0, options?.y ?? 0);
     this._alignment = {
       horizontal: 'left',
       vertical: 'top',
-      ...options.alignment,
+      ...options?.alignment,
     };
     this._graphics = new Phaser.GameObjects.Graphics(scene);
     this.add(this._graphics);
     const base = DefaultTheme.panel;
-    this._style = merge(base, options.style);
+    this._style = merge(base, options?.style);
 
-    super.setSize(options.width ?? 0, options.height ?? 0);
-    this._autoSize = options.autoSize ?? true;
-    this._padding = options.padding ?? null;
+    super.setSize(options?.width ?? 0, options?.height ?? 0);
+    this._autoSize =
+      options?.width !== undefined && options?.height !== undefined ? (options?.autoSize ?? false) : true;
+    this._padding = options?.padding ?? null;
   }
 
   public setLayout(layout: Layout): this {

@@ -9,8 +9,9 @@ export { default as Panel } from './controls/panel.js';
 export { default as Label } from './controls/label.js';
 
 // Layouts
-export { default as VBox } from './layouts/Vbox.js';
-export { default as HBox } from './layouts/Hbox.js';
+export { default as Vbox } from './layouts/Vbox.js';
+export { default as Hbox } from './layouts/Hbox.js';
 
 // Themes
 export * from './themes/Theme.js';
+export * from './themes/buttonStyle.ts';

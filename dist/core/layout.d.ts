@@ -6,10 +6,28 @@ export interface ContentAlignment {
     horizontal: HorizontalAlignment;
     vertical: VerticalAlignment;
 }
+export interface BoxStyle {
+    lineWidth?: number;
+    color?: number;
+    alpha?: number;
+}
+export interface LayoutOptions {
+    alignment?: Partial<ContentAlignment>;
+    enableDrawBox?: boolean;
+    x?: number;
+    y?: number;
+    boxStyle?: BoxStyle;
+    padding?: number;
+    spacing?: number;
+}
 export default abstract class Layout extends UIElement {
-    constructor(scene: Phaser.Scene, x?: number, y?: number);
+    protected readonly _graphics: Phaser.GameObjects.Graphics;
+    protected _alignment: ContentAlignment;
+    protected _enableDrawBox: boolean;
+    protected _boxStyle: BoxStyle;
     protected _spacing: number;
     protected _padding: number;
+    constructor(scene: Phaser.Scene, options?: LayoutOptions);
     setSpacing(value: number): this;
     setPadding(value: number): this;
     addChild(child: UIElement): this;
@@ -26,5 +44,10 @@ export default abstract class Layout extends UIElement {
      * Use addChild() method instead
      */
     add(child: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[]): this;
+    protected drawBox(): void;
+    protected setChildPosition(child: UIElement, centerX: number, centerY: number): void;
+    setAlignment(alignment: Partial<ContentAlignment>): this;
+    setBoxStyle(style: BoxStyle): this;
+    set enableBox(val: boolean);
 }
 //# sourceMappingURL=layout.d.ts.map

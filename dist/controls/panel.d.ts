@@ -23,7 +23,7 @@ export default class Panel extends UIElement {
     private _alignment;
     private align;
     private valign;
-    constructor(scene: Phaser.Scene, options: PanelOptions);
+    constructor(scene: Phaser.Scene, options?: PanelOptions);
     setLayout(layout: Layout): this;
     removeLayout(): this;
     private detachLayout;

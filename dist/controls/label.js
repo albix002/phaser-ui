@@ -15,7 +15,6 @@ export default class Label extends UIElement {
     }
     layout() {
         this.setMeasuredSize(this._textObject.width, this._textObject.height);
-        console.log('label', this.width, this.height, this.x, this.y);
     }
     setText(text) {
         if (this._textObject.text === text)
