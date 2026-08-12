@@ -33,7 +33,7 @@ export default abstract class Layout extends UIElement {
     addChild(child: UIElement): this;
     removeChild(child: UIElement): this;
     clearChildren(): this;
-    getChildren(): Iterable<UIElement>;
+    getChildren(): UIElement[];
     getChildCount(): number;
     hasChildren(): boolean;
     protected abstract layout(): void;

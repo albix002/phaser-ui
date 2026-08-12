@@ -36,7 +36,7 @@ export default class Panel extends UIElement {
     removeChild(child: UIElement): this;
     clearChildren(): this;
     private getLayout;
-    getChildren(): Iterable<UIElement>;
+    getChildren(): UIElement[];
     getChildCount(): number;
     hasChildren(): boolean;
     hasLayout(): boolean;

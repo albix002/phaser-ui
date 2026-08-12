@@ -178,7 +178,7 @@ export default class Panel extends UIElement {
     return this._layout;
   }
 
-  public getChildren(): Iterable<UIElement> {
+  public getChildren(): UIElement[] {
     return this.getLayout().getChildren();
   }
 
