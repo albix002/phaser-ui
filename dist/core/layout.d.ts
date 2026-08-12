@@ -33,11 +33,12 @@ export default abstract class Layout extends UIElement {
     addChild(child: UIElement): this;
     removeChild(child: UIElement): this;
     clearChildren(): this;
-    getChildren(): Phaser.GameObjects.GameObject[];
+    getChildren(): Iterable<UIElement>;
     getChildCount(): number;
     hasChildren(): boolean;
     protected abstract layout(): void;
     protected visibleChildren(): Iterable<UIElement>;
+    protected UIchildren(): Iterable<UIElement>;
     /**
      * @deprecated
      *

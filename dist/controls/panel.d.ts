@@ -36,7 +36,7 @@ export default class Panel extends UIElement {
     removeChild(child: UIElement): this;
     clearChildren(): this;
     private getLayout;
-    getChildren(): Phaser.GameObjects.GameObject[];
+    getChildren(): Iterable<UIElement>;
     getChildCount(): number;
     hasChildren(): boolean;
     hasLayout(): boolean;

@@ -56,7 +56,7 @@ export default class Layout extends UIElement {
         return this;
     }
     getChildren() {
-        return [...this.list];
+        return this.UIchildren();
     }
     getChildCount() {
         return this.list.length;
@@ -69,6 +69,12 @@ export default class Layout extends UIElement {
             if (child instanceof UIElement && child.visible) {
                 yield child;
             }
+        }
+    }
+    *UIchildren() {
+        for (const child of this.list) {
+            if (child instanceof UIElement)
+                yield child;
         }
     }
     /**
